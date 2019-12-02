@@ -1,6 +1,8 @@
 package com.thida.movieshow;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -14,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +32,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,8 +41,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final ImageView imageView = findViewById(R.id.imageView);
-        final TextView text = findViewById(R.id.textView);
+
+        final RecyclerView recyclerView = findViewById(R.id.recycler_view);
+
+        final List<MovieItem> movieList = new ArrayList<MovieItem>();
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.show();
 
@@ -73,12 +80,23 @@ public class MainActivity extends AppCompatActivity {
                         JsonArray jsonArray = jsonObject.getAsJsonArray("result");
                         for(int i=0;i<jsonArray.size();i++){
                             JsonObject jsonObject1 = jsonArray.get(i).getAsJsonObject();
-                            text.setText(jsonObject1.get("name").getAsString());
+                            MovieItem item = new MovieItem();
+
                             String image=jsonObject1.get("image").getAsString();
                             byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
                             Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                            imageView.setImageBitmap(bitmap);
+                            item.setMovieName(jsonObject1.get("name").getAsString());
+                            item.setImage(bitmap);
+                            movieList.add(item);
                         }
+                        Log.e("moview ",movieList.size()+"");
+                        GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),2);
+                        recyclerView.setLayoutManager(layoutManager);
+
+                        MovieAdapter adapter = new MovieAdapter(movieList);
+                        recyclerView.setAdapter(adapter);
+
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
