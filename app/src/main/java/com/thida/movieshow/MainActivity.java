@@ -1,8 +1,11 @@
 package com.thida.movieshow;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -10,15 +13,19 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -41,12 +48,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        isWriteStoragePermissionGranted();
 
+        getDatafromServer();
+
+        final SwipeRefreshLayout refreshLayout = findViewById(R.id.refresh_layout);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshLayout.setRefreshing(false);
+                getDatafromServer();
+
+            }
+        });
+
+
+    }
+
+    public void getDatafromServer(){
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
         final List<MovieItem> movieList = new ArrayList<MovieItem>();
-        final ProgressDialog dialog = new ProgressDialog(this);
-        dialog.show();
 
         String server = "http://172.16.4.110:7070";
 
@@ -60,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.body()!=null){
-                    dialog.dismiss();
+
                     Log.e("data from Server ",response.body().toString());
                     try {
                         /*JSONObject object = new JSONObject(response.body().string());
@@ -108,13 +130,54 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    dialog.dismiss();
-                    Toast.makeText(getApplicationContext(),"Error"+t.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Error"+t.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
+    }
 
+    public  boolean isWriteStoragePermissionGranted()
+    {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) return true;
+            else
+            {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, 1);
+                return false;
+            }
+        }
+        return true;
+        //permission is automatically granted on sdk<23 upon installation
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        switch (requestCode){
+            case 1:
+                if(grantResults[0]==PackageManager.PERMISSION_GRANTED) {
 
+                }
+                break;
+
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.admin:
+                startActivity(new Intent(this,AdminActivity.class));
+
+        }
+        return true;
     }
 }

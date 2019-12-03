@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+   >
+    <EditText
+        android:id = "@+id/movie_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:hint="Movie Name"/>
+    <ImageView
+        android:id = "@+id/image"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_height="220dp"/>
+    <Button
+        android:id = "@+id/browse_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text ="Photo Browse"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="#FFFFFFFF"
+        />
+
+    <Button
+        android:id="@+id/send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text ="Send to Server"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/colorAccent"
+        android:textColor="#FFFFFFFF"
+        />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
+</LinearLayout>
