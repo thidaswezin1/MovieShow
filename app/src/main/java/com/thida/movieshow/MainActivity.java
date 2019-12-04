@@ -118,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
                         MovieAdapter adapter = new MovieAdapter(movieList);
                         recyclerView.setAdapter(adapter);
 
-
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -154,13 +153,10 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        switch (requestCode){
-            case 1:
-                if(grantResults[0]==PackageManager.PERMISSION_GRANTED) {
-
-                }
-                break;
-
+        if(requestCode==1){
+            if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                Log.e("Permission ","is ok");
+            }
         }
     }
 
@@ -179,5 +175,11 @@ public class MainActivity extends AppCompatActivity {
 
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        //finish all previous activities
+       ActivityCompat.finishAffinity(this);
     }
 }

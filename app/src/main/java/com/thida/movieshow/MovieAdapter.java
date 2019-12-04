@@ -14,15 +14,25 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.thida.movieshow.Service.ApiService;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder>{
     private List<MovieItem> movieList;
+    String server = "http://172.16.4.110:7070";
 
     public MovieAdapter(List<MovieItem> movieList) {
         this.movieList = movieList;
@@ -85,6 +95,53 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                             }
                         }).show();
 
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View view) {
+                //Toast.makeText(view.getContext(),"hello",Toast.LENGTH_LONG).show();
+                new AlertDialog.Builder(view.getContext())
+                        .setTitle("DELETE PHOTO")
+                        .setIcon(R.drawable.ic_delete_forever_black_24dp)
+                        .setMessage("Are you sure to delete?")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                Retrofit retrofit = new Retrofit.Builder()
+                                        .baseUrl(server)
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build();
+                                ApiService apiService = retrofit.create(ApiService.class);
+                                Call<ResponseBody> call = apiService.deleteMovie(position+1);
+                                call.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if(response.isSuccessful()) {
+
+                                            Toast.makeText(view.getContext(),"Deleting is Success",Toast.LENGTH_LONG).show();
+                                            Intent intent = new Intent(view.getContext(),MainActivity.class);
+                                            view.getContext().startActivity(intent);
+                                        }
+                                        else Toast.makeText(view.getContext(),"Error " +response.body().toString(),Toast.LENGTH_LONG).show();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        Toast.makeText(view.getContext(),"Failure "+t.getMessage(),Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        }).show();
+                return true;
             }
         });
     }
