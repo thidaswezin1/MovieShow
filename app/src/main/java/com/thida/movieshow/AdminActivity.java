@@ -14,11 +14,11 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.google.gson.JsonObject;
 import com.thida.movieshow.Service.ApiService;
-
 import java.io.ByteArrayOutputStream;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,20 +27,16 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AdminActivity extends AppCompatActivity {
-    ImageView image;
-    EditText movieName;
-    ProgressBar progressBar;
+    @BindView(R.id.image) ImageView image;
+    @BindView(R.id.movie_name) EditText movieName;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.browse_photo) Button browse;
+    @BindView(R.id.send) Button send;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin);
-        final Button browse = findViewById(R.id.browse_photo);
-        final Button send = findViewById(R.id.send);
-        image = findViewById(R.id.image);
-        movieName = findViewById(R.id.movie_name);
-        progressBar = findViewById(R.id.progressBar);
-
-
+        ButterKnife.bind(this);
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

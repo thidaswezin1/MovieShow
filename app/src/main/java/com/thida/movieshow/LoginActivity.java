@@ -18,6 +18,8 @@ import com.thida.movieshow.Service.ApiService;
 import java.io.IOException;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,22 +28,29 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
-    EditText email,password;
+
+    @BindView(R.id.email)
+    EditText email;
+
+    @BindView(R.id.password)
+    EditText password;
+
+    @BindView(R.id.btn_login)
+    Button login;
+
+    @BindView(R.id.progressBar)
     ProgressBar progressBar;
+
+    @BindView(R.id.checkbox)
     CheckBox checkBox;
+
     Gson gson = new Gson();
     SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
-        progressBar = findViewById(R.id.progressBar);
-        checkBox = findViewById(R.id.checkbox);
-
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
-        final Button login = findViewById(R.id.btn_login);
+        ButterKnife.bind(this);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if(sharedPreferences.getBoolean("logged",false)){

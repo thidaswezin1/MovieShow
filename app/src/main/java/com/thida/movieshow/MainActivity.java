@@ -12,9 +12,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -62,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     public void getDatafromServer(){
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
-        final List<MovieItem> movieList = new ArrayList<MovieItem>();
+        final List<MovieItem> movieList = new ArrayList<>();
 
         String server = "http://172.16.4.110:7070";
 
