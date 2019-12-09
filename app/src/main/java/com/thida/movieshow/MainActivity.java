@@ -27,17 +27,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.thida.movieshow.Service.ApiService;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                             item.setImage(bitmap);
                             movieList.add(item);
                         }
-                        Log.e("moview ",movieList.size()+"");
+                        Log.e("movie list size ",movieList.size()+"");
                         GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),2);
                         recyclerView.setLayoutManager(layoutManager);
 

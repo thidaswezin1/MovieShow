@@ -19,5 +19,8 @@ public interface ApiService {
     @DELETE("/api/movies/{id}")
     Call<ResponseBody> deleteMovie(@Path("id") int movieId);
 
+    @POST("/api/checkUser")
+    Call<ResponseBody> postUser(@Body JsonObject body);
+
 
 }
